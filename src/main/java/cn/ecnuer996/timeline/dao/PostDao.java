@@ -19,6 +19,12 @@ public class PostDao {
         List<Post> posts=jdbcTemplate.query("select * from post",new PostRowMapper());
         return posts;
     }
+
+    public List<Post> listNextFivePost(int id){
+        String sql = "select * from post where id > " + id + " limit 5;";
+        List<Post> posts=jdbcTemplate.query(sql,new PostRowMapper());
+        return posts;
+    }
 }
 
 class PostRowMapper implements RowMapper<Post>{
