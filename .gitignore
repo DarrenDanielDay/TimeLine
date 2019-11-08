@@ -4,6 +4,14 @@ target/
 !**/src/main/**
 !**/src/test/**
 
+/timeline-ui/.DS_Store
+/timeline-ui/node_modules
+/timeline-ui/dist
+
+/timeline-ui/tests/e2e/videos/
+/timeline-ui/tests/e2e/screenshots/
+
+
 ### STS ###
 .apt_generated
 .classpath
