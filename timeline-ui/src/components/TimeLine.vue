@@ -1,5 +1,11 @@
 <template>
-  <div id="timeline-app">hello,ts!{{msg}}</div>
+  <div id="timeline-app">
+    <el-row>
+      <el-col v-for="i in 4" :span="6" :key="i">
+        {{i}}
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script lang="ts">
