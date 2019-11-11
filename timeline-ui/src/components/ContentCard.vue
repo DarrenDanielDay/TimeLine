@@ -41,7 +41,7 @@ import Axios from "axios";
 import moment from "moment";
 import { app } from "../main";
 
-const urlBase = "http://localhost:8888/";
+const urlBase = "https://ecnuer996.cn/timeline/";
 const logo = require("../assets/logo.png");
 
 class User {

@@ -26,7 +26,7 @@ import { Comment } from "./ContentCard.vue";
 import Component from "vue-class-component";
 import Axios from "axios";
 import { app } from "../main";
-const urlBase = "http://localhost:8888/";
+const urlBase = "https://ecnuer996.cn/timeline/";
 
 @Component({
   components: {
