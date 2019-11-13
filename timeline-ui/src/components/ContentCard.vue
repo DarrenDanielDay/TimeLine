@@ -45,33 +45,32 @@ const urlBase = "https://ecnuer996.cn/timeline/";
 const logo = require("../assets/logo.png");
 
 class User {
-  public static allUsers: { [key: number]: User } = {};
+  public static allUsers: { [key: string]: User } = {};
   public username: string = "";
-
-  constructor(public id: number) {
+  public useravatar:string = "";
+  constructor(username: string,useravatar:string) {
+    this.username = username;
+    this.useravatar = useravatar;
     this.getInfo();
   }
 
   public getInfo() {
-    if (this.id === -1) {
+    if (this.username === "") {
       this.username = "无名氏";
       return;
     }
-    if (this.id in User.allUsers) {
-      this.username = User.allUsers[this.id].username;
-    } else {
+    if (!(this.username in User.allUsers)) {
       Axios.get(`${urlBase}all-user`)
         .then(response => {
           for (let i in response.data) {
             const json = response.data[i];
-            if (!(json.id in User.allUsers)) {
-              const id = json.id;
-              let user = new User(id);
-              user.username = json.nickname;
-              User.allUsers[id] = user;
+            if (!(json.nickname in User.allUsers)) {
+              const username = json.nickname;
+              const useravatar = json.avatar;
+              let user = new User(username,useravatar);
+              User.allUsers[username] = user;
             }
           }
-          this.username = User.allUsers[this.id].username;
         })
         .catch(error => {
           console.error(error);
@@ -86,16 +85,18 @@ class User {
 
 class Comment {
   public static Parse(json: {
-    id: number;
-    userId: number;
-    time: string;
+    nickname: string;
+    avatar: string;
+    id:number;
+    postTime: string;
     content: string;
     images?: string[] | undefined;
   }): Comment {
-    let date = moment(json.time).toDate();
+    let date = moment(json.postTime).toDate();
     return new Comment(
+      json.nickname,
+      json.avatar,
       json.id,
-      json.userId,
       date,
       json.content,
       json.images ? json.images : []
@@ -103,7 +104,7 @@ class Comment {
   }
 
   public static Default(): Comment {
-    return new Comment(-1, -1, new Date(), "这是第一行\n这是第二行", [
+    return new Comment("", logo,-1, new Date(), "这是第一行\n这是第二行", [
       logo,
       logo,
       logo
@@ -113,14 +114,15 @@ class Comment {
   public user: User;
 
   constructor(
-    public id: number,
-    uid: number,
+    nickname: string,
+    avatar: string,
+    public id:number,
     public time: Date,
     public content: string,
     public images: string[]
   ) {
-    console.log(`comment ${id} init`);
-    this.user = new User(uid);
+    console.log(`comment ${nickname} init`);
+    this.user = new User(nickname,avatar);
   }
 }
 
