@@ -13,7 +13,7 @@ public class PostImageDao {
 //    private PostImageRowMapper rowMapper=new PostImageRowMapper();
 
     public List<String> selectImagesByPostId(Integer postId){
-        String sql="select url from post_image where post_id="+postId;
+        String sql="select url from post_image where post_id="+postId+";";
         return jdbcTemplate.queryForList(sql,String.class);
     }
 }

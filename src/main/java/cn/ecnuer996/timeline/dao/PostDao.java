@@ -17,7 +17,7 @@ public class PostDao {
     JdbcTemplate jdbcTemplate;
 
     public List<Post> listAllPost(){
-        List<Post> posts=jdbcTemplate.query("select * from post",new PostRowMapper());
+        List<Post> posts=jdbcTemplate.query("select * from post;",new PostRowMapper());
         return posts;
     }
 
@@ -38,25 +38,19 @@ public class PostDao {
         return posts;
     }
 
-    public List<Post> listNextFivePostByDescTime(int id){
-        String sql = "select * from post where id > " + id + " limit 5;";
-        List<Post> posts=jdbcTemplate.query(sql,new PostRowMapper());
-        return posts;
-    }
-
     public List<Post> listPostsAfterTime(Date time){
-        String sql="select * from post where time > ? order by time desc limit 10";
+        String sql="select * from post where time > ? order by time desc limit 10;";
         List<Post> posts=jdbcTemplate.query(sql,new PostRowMapper(),time);
         return posts;
     }
 
     public int insert(Post post){
-        String sql="insert into post values(?,?,?,?)";
+        String sql="insert into post values(?,?,?,?);";
         return jdbcTemplate.update(sql,post.getId(),post.getUserId(),post.getTime(),post.getContent());
     }
 
     public List<Post> listNextFivePostsBeforeTime(Date time){
-        String sql="select * from post where time < ? order by time desc limit 5";
+        String sql="select * from post where time < ? order by time desc limit 5;";
         List<Post> posts=jdbcTemplate.query(sql,new PostRowMapper(),time);
         return posts;
     }

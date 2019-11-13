@@ -8,7 +8,7 @@
 
 ### 请求地址
 
-```POST https://ecnuer996.cn/timeline/more-posts```
+```GET https://ecnuer996.cn/timeline/more-posts```
 
 ### 请求参数
 
@@ -48,7 +48,7 @@ images | array | POST附加的图片列表
 
 ### 请求地址
 
-```POST https://ecnuer996.cn/timeline/refresh```
+```GET https://ecnuer996.cn/timeline/refresh```
 
 ### 请求参数
 

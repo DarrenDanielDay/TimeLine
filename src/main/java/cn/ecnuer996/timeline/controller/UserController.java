@@ -31,35 +31,12 @@ public class UserController {
     private PostService postService;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    @RequestMapping(value = "/all-user", method = RequestMethod.GET)
-    public List<User> getAllUser() {
-        return userDao.listAllUser();
-    }
-
-    @RequestMapping(value = "/all-post", method = RequestMethod.GET)
-    public List<Post> getAllPost() {
-        return postDao.listAllPost();
-    }
-
-    @RequestMapping(value = "/next-five-post", method = RequestMethod.GET)
-    public List<Post> getNextFivePost(HttpServletRequest request) {
-        int id = Integer.parseInt(request.getParameter("id"));
-        return postDao.listNextFivePost(id);
-    }
-
-    @RequestMapping(value = "/previous-five-post", method = RequestMethod.GET)
-    public List<Post> getPreviousFivePost(HttpServletRequest request) {
-        int id = Integer.parseInt(request.getParameter("id"));
-        return postDao.listPreviousFivePost(id);
-    }
-
     @RequestMapping(value = "/more-posts", method = RequestMethod.GET)
     public JSONObject getMorePosts(@RequestParam(required = false) String time) {
         JSONObject response = new JSONObject();
         JSONArray items = new JSONArray();
         List<Post> posts;
         if (time != null) {
-//            posts=postDao.listNextFivePost(id);
             Date date;
             try {
                 date = dateFormat.parse(time);
@@ -69,9 +46,7 @@ public class UserController {
                 response.put("code", "40400");
                 return response;
             }
-            //查询此时间之后的所有POST
             //查询此时间之前的至多5条POST
-//            posts=postDao.listPostsAfterTime(date);
             posts = postDao.listNextFivePostsBeforeTime(date);
         } else {
             //初次加载，返回最新五条POST
