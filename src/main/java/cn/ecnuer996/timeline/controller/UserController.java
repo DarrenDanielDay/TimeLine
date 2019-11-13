@@ -11,8 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
@@ -25,7 +26,7 @@ public class UserController {
     @Autowired
     private PostImageDao postImageDao;
 
-    private SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    private SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @RequestMapping(value="/all-user",method= RequestMethod.GET)
     public List<User> getAllUser(){
@@ -50,13 +51,25 @@ public class UserController {
     }
 
     @RequestMapping(value = "more-posts",method = RequestMethod.GET)
-    public JSONObject getMorePosts(@RequestParam(required = false) Integer id){
+    public JSONObject getMorePosts(@RequestParam(required = false) String time){
         JSONObject response=new JSONObject();
         JSONArray items=new JSONArray();
         List<Post> posts;
-        if(id!=null){
-            posts=postDao.listNextFivePost(id);
+        if(time!=null){
+//            posts=postDao.listNextFivePost(id);
+            Date date;
+            try{
+                date=dateFormat.parse(time);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                response.put("msg","时间参数格式非法");
+                response.put("code","40400");
+                return response;
+            }
+            //查询此时间之后的所有POST
+            posts=postDao.listPostsAfterTime(date);
         }else{
+            //初次加载，返回最新五条POST
             posts=postDao.listLatestFivePost();
         }
         for(int i=0;i<posts.size();++i){
@@ -75,4 +88,31 @@ public class UserController {
         response.put("posts",items);
         return response;
     }
+
+//    @RequestMapping(value = "more-posts",method = RequestMethod.GET)
+//    public JSONObject getMorePosts(@RequestParam(required = false) Integer id){
+//        JSONObject response=new JSONObject();
+//        JSONArray items=new JSONArray();
+//        List<Post> posts;
+//        if(id!=null){
+//            posts=postDao.listNextFivePost(id);
+//        }else{
+//            posts=postDao.listLatestFivePost();
+//        }
+//        for(int i=0;i<posts.size();++i){
+//            JSONObject item=new JSONObject();
+//            Post post=posts.get(i);
+//            User user=userDao.selectUserById(post.getUserId());
+//            List<String> images=postImageDao.selectImagesByPostId(post.getId());
+//            item.put("nickname",user.getNickname());
+//            item.put("avatar",user.getAvatar());
+//            item.put("id",post.getId());
+//            item.put("content",post.getContent());
+//            item.put("postTime",dateFormat.format(post.getTime()));
+//            item.put("images",images);
+//            items.add(item);
+//        }
+//        response.put("posts",items);
+//        return response;
+//    }
 }

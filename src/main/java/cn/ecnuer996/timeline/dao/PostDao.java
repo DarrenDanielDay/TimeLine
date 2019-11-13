@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -40,6 +41,12 @@ public class PostDao {
     public List<Post> listNextFivePostByDescTime(int id){
         String sql = "select * from post where id > " + id + " limit 5;";
         List<Post> posts=jdbcTemplate.query(sql,new PostRowMapper());
+        return posts;
+    }
+
+    public List<Post> listPostsAfterTime(Date time){
+        String sql="select * from post where time > ? order by time desc";
+        List<Post> posts=jdbcTemplate.query(sql,new PostRowMapper(),time);
         return posts;
     }
 }
