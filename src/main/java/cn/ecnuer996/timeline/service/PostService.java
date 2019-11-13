@@ -1,8 +1,10 @@
 package cn.ecnuer996.timeline.service;
 
 import cn.ecnuer996.timeline.bean.Post;
+import cn.ecnuer996.timeline.bean.PostImage;
 import cn.ecnuer996.timeline.bean.User;
 import cn.ecnuer996.timeline.dao.PostDao;
+import cn.ecnuer996.timeline.dao.PostImageDao;
 import cn.ecnuer996.timeline.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,8 @@ public class PostService {
     private PostDao postDao;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private PostImageDao postImageDao;
 
     //随机生成一些post并插入到数据库
     public List<Post> generateNewPostsRandomly(Date latestPostTime){
@@ -38,6 +42,13 @@ public class PostService {
             newPost.setContent("我"+poster.getNickname()+"就喜欢跟"+nextUser.getNickname()+"一起玩");
             //插入新数据
             postDao.insert(newPost);
+            // begin 这里是添加新post的图片
+            Integer newPostId = postImageDao.getLatestPostId();
+            PostImage newPostImage = new PostImage();
+            newPostImage.setPostId(newPostId);
+            newPostImage.setUrl("https://ecnuer996.cn/timeline-file/post-image/1000"+newPostId%6+"-1.jpg");
+            postImageDao.insert(newPostImage);
+             // end 这里是添加新post的图片
             temp.setTime(temp.getTime()+(60+rand.nextInt(20))*60000L); //给时间加上60分钟左右的间隔
         }
         return postDao.listPostsAfterTime(latestPostTime);

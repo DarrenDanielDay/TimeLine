@@ -1,5 +1,6 @@
 package cn.ecnuer996.timeline.dao;
 
+import cn.ecnuer996.timeline.bean.PostImage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,19 @@ public class PostImageDao {
         String sql="select url from post_image where post_id="+postId+";";
         return jdbcTemplate.queryForList(sql,String.class);
     }
+
+    public Integer getLatestPostId(){
+        String sql="select post_id from post_image order by post_id desc limit 1;";
+        List<String> temp = jdbcTemplate.queryForList(sql,String.class);
+        if(temp.size() == 0)return -1;
+        return Integer.parseInt(temp.get(0));
+    }
+
+    public void insert(PostImage postImage){
+        String sql="insert into post_image values(?,?);";
+        jdbcTemplate.update(sql,postImage.getPostId(),postImage.getUrl());
+    }
+
 }
 
 //class PostImageRowMapper implements RowMapper<PostImage>{
