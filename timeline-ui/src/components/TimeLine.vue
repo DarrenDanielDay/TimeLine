@@ -40,7 +40,7 @@ class TimeLine extends Vue {
   }
   mounted(): void {
     console.log("mounted!");
-    Axios.get(`${urlBase}next-five-post`, { params: { id: 10001 } })
+    Axios.get(`${urlBase}more-posts`, {  })
       .then(response => {
         this.add(response);
       })
@@ -55,11 +55,11 @@ class TimeLine extends Vue {
   }
   previous(): void {
     console.log("previous!");
-    let lastID = 0;
+    let lastTime = "" ;
     if (this.cards.length > 0) {
-      lastID = this.cards.slice(-1)[0].id;
+      lastTime = this.cards.slice(-1)[0].time.toString();
     }
-    Axios.get(`${urlBase}previous-five-post`, { params: { id: lastID } })
+    Axios.get(`${urlBase}more-posts`, { params: { time: lastTime } })
       .then(response => {
         let cnt=this.cards.length;
         this.add(response);
@@ -79,17 +79,17 @@ class TimeLine extends Vue {
   }
   forward(): void {
     console.log("forward!");
-    let firstID = 0;
+    let latestTime = "";
     if (this.cards.length > 0) {
-      firstID = this.cards[0].id;
+      latestTime = this.cards[0].time.toString();
     }
 
-    Axios.get(`${urlBase}next-five-post`, { params: { id: firstID } })
+    Axios.get(`${urlBase}refresh`, { params: { time: latestTime } })
       .then(response => {
-        let cnt=this.cards.length;
         this.add(response);
+        this.cards = this.cards.slice(0,10);
         app.$message({
-          message:`增加了${this.cards.length-cnt}条信息`,
+          message:`刷新成功`,
           type:"success"
         })
       })
@@ -111,7 +111,7 @@ class TimeLine extends Vue {
       this.cards.push(Comment.Parse(obj));
     }
     this.cards.sort((a: Comment, b: Comment): number => {
-      return b.id - a.id;
+      return b.time > a.time?1:-1;///todo
     });
   }
 }
