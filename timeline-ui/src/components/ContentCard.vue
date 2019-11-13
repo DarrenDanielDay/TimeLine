@@ -27,7 +27,7 @@
       </el-row>
       <el-row>
         <el-col>
-          <p v-for="(line, index) in this.lines" :key="index">{{line}}</p>
+           <p v-for="(line, index) in this.lines" :key="index">{{line}}</p>
         </el-col>
       </el-row>
     </el-card>
