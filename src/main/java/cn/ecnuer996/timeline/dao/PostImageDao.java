@@ -18,13 +18,6 @@ public class PostImageDao {
         return jdbcTemplate.queryForList(sql,String.class);
     }
 
-    public Integer getLatestPostId(){
-        String sql="select post_id from post_image order by post_id desc limit 1;";
-        List<String> temp = jdbcTemplate.queryForList(sql,String.class);
-        if(temp.size() == 0)return -1;
-        return Integer.parseInt(temp.get(0));
-    }
-
     public void insert(PostImage postImage){
         String sql="insert into post_image values(?,?);";
         jdbcTemplate.update(sql,postImage.getPostId(),postImage.getUrl());
