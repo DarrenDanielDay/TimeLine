@@ -69,8 +69,10 @@ public class UserController {
         try {
             date = dateFormat.parse(time);
         } catch (ParseException e) {
+            //时间格式不正确或time为空字符串，返回空数组
             e.printStackTrace();
-            return null;
+            response.put("posts",items);
+            return response;
         }
         List<Post> posts = postService.generateNewPostsRandomly(date);
         for(Post post : posts) {
