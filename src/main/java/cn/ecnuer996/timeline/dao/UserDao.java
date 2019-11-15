@@ -27,6 +27,12 @@ public class UserDao {
         User user=jdbcTemplate.queryForObject(sql,rowMapper,id);
         return user;
     }
+
+    public String selectAvatarByNickname(String nickname){
+        String sql="select * from user_t where nickname=?";
+        List<User> user = jdbcTemplate.query(sql,rowMapper,nickname);
+        return user.get(0).getAvatar();
+    }
 }
 
 class UserRowMapper implements RowMapper<User>{

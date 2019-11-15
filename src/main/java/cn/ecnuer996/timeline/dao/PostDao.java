@@ -54,6 +54,13 @@ public class PostDao {
         List<Post> posts=jdbcTemplate.query(sql,new PostRowMapper(),time);
         return posts;
     }
+
+    public Integer getLatestPostId(){
+        String sql="select id from post order by id desc limit 1;";
+        List<String> temp = jdbcTemplate.queryForList(sql,String.class);
+        if(temp.size() == 0)return -1;
+        return Integer.parseInt(temp.get(0));
+    }
 }
 
 class PostRowMapper implements RowMapper<Post>{
