@@ -66,7 +66,7 @@ public class UserController {
         JSONObject response = new JSONObject();
         JSONArray items = new JSONArray();
         List<Post> posts;
-        if(time != null && time != "") {
+        if(time != null && !time.equals("") ) {
             Date date;
             try {
                 date = dateFormat.parse(time);
@@ -108,7 +108,7 @@ public class UserController {
 //        return response;
 //    }
 
-    private JSONObject generatePostItem(Post post){
+    public JSONObject generatePostItem(Post post){
         JSONObject item = new JSONObject();
         User user = userDao.selectUserById(post.getUserId());
         List<String> images = postImageDao.selectImagesByPostId(post.getId());

@@ -40,4 +40,12 @@ public class Post {
         this.content = content;
     }
 
+    public Post()
+    {
+        id = 1;
+        userId = 1;
+        time = new Date();
+        content = "123";
+    }
+
 }

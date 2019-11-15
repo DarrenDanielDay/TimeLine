@@ -1,5 +1,13 @@
 package cn.ecnuer996.timeline.controller;
 
+import cn.ecnuer996.timeline.bean.Post;
+import cn.ecnuer996.timeline.bean.PostImage;
+import cn.ecnuer996.timeline.bean.User;
+import cn.ecnuer996.timeline.dao.PostDao;
+import cn.ecnuer996.timeline.dao.PostImageDao;
+import cn.ecnuer996.timeline.dao.UserDao;
+import cn.ecnuer996.timeline.service.PostService;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -11,6 +19,7 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
@@ -19,17 +28,49 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.when;
+
 
 @SpringBootTest
 class UserControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
+    @MockBean
+    private PostDao postDao;
+    @MockBean
+    private UserDao userDao;
+    @MockBean
+    private PostImageDao postImageDao;
 
     private MockMvc mockMvc;
 
     @BeforeEach
     public void init() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        List<Post> posts = new ArrayList<Post>();
+        List<String> images = new ArrayList<>();
+        images.add("1");
+        images.add("2");
+        images.add("3");
+        images.add("4");
+        images.add("5");
+        posts.add(new Post());
+        posts.add(new Post());
+        posts.add(new Post());
+        posts.add(new Post());
+        posts.add(new Post());
+        when(postDao.listLatestFivePost()).thenReturn(posts);
+        when(postDao.listNextFivePostsBeforeTime(isA(Date.class))).thenReturn(posts);
+        when(postDao.listPostsAfterTime(isA(Date.class))).thenReturn(posts);
+        when(userDao.selectUserById(isA(Integer.class))).thenReturn(new User());
+        when(userDao.selectAvatarByNickname(isA(String.class))).thenReturn("2");
+        when(postImageDao.selectImagesByPostId(isA(Integer.class))).thenReturn(images);
     }
 
     @ParameterizedTest

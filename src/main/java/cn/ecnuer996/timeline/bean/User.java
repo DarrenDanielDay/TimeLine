@@ -28,4 +28,11 @@ public class User {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
+
+    public User()
+    {
+        id = 1;
+        nickname = "1";
+        avatar = "avatar";
+    }
 }
