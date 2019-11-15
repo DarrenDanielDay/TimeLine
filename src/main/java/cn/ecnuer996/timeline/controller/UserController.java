@@ -62,21 +62,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/refresh", method = RequestMethod.GET)
-    public JSONObject refresh() {
+    public JSONObject refresh(@RequestParam String time) {
         JSONObject response = new JSONObject();
         JSONArray items = new JSONArray();
-        List<Post> posts = postService.generateNewPostsRandomly(new Date());
-        for(Post post : posts) {
-            items.add(generatePostItem(post));
-        }
-        response.put("posts",items);
-        return response;
-    }
-
-    @RequestMapping(value = "/test-generate", method = RequestMethod.GET)
-    public JSONObject testGeneratePosts(@RequestParam String time) {
-        JSONObject response=new JSONObject();
-        JSONArray items=new JSONArray();
         Date date;
         try {
             date = dateFormat.parse(time);
@@ -84,14 +72,33 @@ public class UserController {
             e.printStackTrace();
             return null;
         }
-        List<Post> posts=postService.generateNewPostsRandomly(date);
-        for (int i = 0; i < posts.size(); ++i) {
-            Post post = posts.get(i);
+        List<Post> posts = postService.generateNewPostsRandomly(date);
+        for(Post post : posts) {
             items.add(generatePostItem(post));
         }
         response.put("posts",items);
         return response;
     }
+
+//    @RequestMapping(value = "/test-generate", method = RequestMethod.GET)
+//    public JSONObject testGeneratePosts(@RequestParam String time) {
+//        JSONObject response=new JSONObject();
+//        JSONArray items=new JSONArray();
+//        Date date;
+//        try {
+//            date = dateFormat.parse(time);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//        List<Post> posts=postService.generateNewPostsRandomly(date);
+//        for (int i = 0; i < posts.size(); ++i) {
+//            Post post = posts.get(i);
+//            items.add(generatePostItem(post));
+//        }
+//        response.put("posts",items);
+//        return response;
+//    }
 
     private JSONObject generatePostItem(Post post){
         JSONObject item = new JSONObject();
