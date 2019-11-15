@@ -14,6 +14,8 @@ import TimeLine from "./components/TimeLine.vue";
   }
 })
 export default class App extends Vue {}
+const urlBase:string = "https://ecnuer996.cn/timeline/";
+export {urlBase};
 </script>
 
 <style>

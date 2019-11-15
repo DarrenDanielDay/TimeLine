@@ -26,7 +26,7 @@ import { Comment } from "./ContentCard.vue";
 import Component from "vue-class-component";
 import Axios from "axios";
 import { app } from "../main";
-const urlBase = "https://ecnuer996.cn/timeline/";
+import {urlBase}from "../App.vue";
 
 @Component({
   components: {
@@ -34,13 +34,19 @@ const urlBase = "https://ecnuer996.cn/timeline/";
   }
 })
 class TimeLine extends Vue {
-  public cards: Comment[] = [];
+  public static urlBase:string=urlBase;
+  public urlBase:string=urlBase;
+  public cards: Comment[] = new Array<Comment>();
   constructor() {
     super();
+    console.log("init TimeLine");
+    console.log(urlBase);
   }
   mounted(): void {
     console.log("mounted!");
-    Axios.get(`${urlBase}more-posts`, {  })
+    console.log(`${this.urlBase}more-posts`);
+
+    Axios.get(`${this.urlBase}more-posts`, {  })
       .then(response => {
         this.add(response);
       })
@@ -57,8 +63,10 @@ class TimeLine extends Vue {
     console.log("previous!");
     let lastTime = "" ;
     if (this.cards.length > 0) {
-      lastTime = this.cards.slice(-1)[0].time.toString();
+      lastTime = this.cards.slice(-1)[0].time;
     }
+    console.log(`${urlBase}more-posts?time=${lastTime}`);
+    console.log(lastTime);
     Axios.get(`${urlBase}more-posts`, { params: { time: lastTime } })
       .then(response => {
         let cnt=this.cards.length;
@@ -83,10 +91,13 @@ class TimeLine extends Vue {
     if (this.cards.length > 0) {
       latestTime = this.cards[0].time.toString();
     }
-
+    console.log(`${urlBase}refresh?time=${latestTime}`);
     Axios.get(`${urlBase}refresh`, { params: { time: latestTime } })
       .then(response => {
         this.add(response);
+        this.cards.sort((a: Comment, b: Comment): number => {
+          return b.time > a.time?1:-1;
+        });
         this.cards = this.cards.slice(0,10);
         app.$message({
           message:`刷新成功`,
@@ -102,17 +113,14 @@ class TimeLine extends Vue {
         });
       });
   }
-  private add(response: { data: { [key: string]: any } }) {
+  private add(response: { data: { posts:any[] } }) {
     console.log("add response:");
     console.log(response);
-    let json = response.data;
+    let json = response.data.posts;
     for (let i in json) {
       let obj = json[i];
       this.cards.push(Comment.Parse(obj));
     }
-    this.cards.sort((a: Comment, b: Comment): number => {
-      return b.time > a.time?1:-1;///todo
-    });
   }
 }
 export default TimeLine;
