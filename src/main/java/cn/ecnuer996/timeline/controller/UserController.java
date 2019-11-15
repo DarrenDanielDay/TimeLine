@@ -37,7 +37,7 @@ public class UserController {
         JSONObject response = new JSONObject();
         JSONArray items = new JSONArray();
         List<Post> posts;
-        if (time != null) {
+        if (time != null && time != "") {
             Date date;
             try {
                 date = dateFormat.parse(time);
@@ -65,16 +65,22 @@ public class UserController {
     public JSONObject refresh(@RequestParam String time) {
         JSONObject response = new JSONObject();
         JSONArray items = new JSONArray();
-        Date date;
-        try {
-            date = dateFormat.parse(time);
-        } catch (ParseException e) {
-            //时间格式不正确或time为空字符串，返回空数组
-            e.printStackTrace();
-            response.put("posts",items);
-            return response;
+        List<Post> posts;
+        if(time != null && time != "") {
+            Date date;
+            try {
+                date = dateFormat.parse(time);
+            } catch (ParseException e) {
+                //时间格式不正确或time为空字符串，返回空数组
+                e.printStackTrace();
+                response.put("posts", items);
+                return response;
+            }
+            posts = postService.generateNewPostsRandomly(date);
         }
-        List<Post> posts = postService.generateNewPostsRandomly(date);
+        else{
+            posts = postDao.listLatestFivePost();
+        }
         for(Post post : posts) {
             items.add(generatePostItem(post));
         }
