@@ -9,6 +9,7 @@ import cn.ecnuer996.timeline.service.PostService;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -57,6 +58,18 @@ public class UserController {
             items.add(generatePostItem(post));
         }
         response.put("posts", items);
+        return response;
+    }
+
+    @RequestMapping(value = "/refresh", method = RequestMethod.GET)
+    public JSONObject refresh() {
+        JSONObject response = new JSONObject();
+        JSONArray items = new JSONArray();
+        List<Post> posts = postService.generateNewPostsRandomly(new Date());
+        for(Post post : posts) {
+            items.add(generatePostItem(post));
+        }
+        response.put("posts",items);
         return response;
     }
 
