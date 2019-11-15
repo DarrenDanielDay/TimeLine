@@ -9,10 +9,8 @@ import cn.ecnuer996.timeline.service.PostService;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -37,7 +35,7 @@ public class UserController {
         JSONObject response = new JSONObject();
         JSONArray items = new JSONArray();
         List<Post> posts;
-        if (time != null && time != "") {
+        if (time != null && !"".equals(time)) {
             Date date;
             try {
                 date = dateFormat.parse(time);
@@ -66,7 +64,7 @@ public class UserController {
         JSONObject response = new JSONObject();
         JSONArray items = new JSONArray();
         List<Post> posts;
-        if(time != null && time != "") {
+        if(time != null && !"".equals(time)) {
             Date date;
             try {
                 date = dateFormat.parse(time);
