@@ -17,11 +17,6 @@ public class UserDao {
 
     private UserRowMapper rowMapper=new UserRowMapper();
 
-    public List<User> listAllUser(){
-        List<User> list=jdbcTemplate.query("select * from user_t;",rowMapper);
-        return list;
-    }
-
     public User selectUserById(int id){
         String sql="select * from user_t where id=?;";
         User user=jdbcTemplate.queryForObject(sql,rowMapper,id);

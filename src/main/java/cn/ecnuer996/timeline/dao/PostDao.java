@@ -16,22 +16,6 @@ public class PostDao {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    public List<Post> listAllPost(){
-        List<Post> posts=jdbcTemplate.query("select * from post;",new PostRowMapper());
-        return posts;
-    }
-
-    public List<Post> listNextFivePost(int id){
-        String sql = "select * from post where id > " + id + " limit 5;";
-        List<Post> posts=jdbcTemplate.query(sql,new PostRowMapper());
-        return posts;
-    }
-
-    public List<Post> listPreviousFivePost(int id) {
-        String sql = "select * from post where id < " + id + " limit 5;";
-        return jdbcTemplate.query(sql,new PostRowMapper());
-    }
-
     public List<Post> listLatestFivePost() {
         String sql = "select * from post order by time desc limit 5;";
         List<Post> posts=jdbcTemplate.query(sql,new PostRowMapper());
@@ -64,7 +48,6 @@ public class PostDao {
 }
 
 class PostRowMapper implements RowMapper<Post>{
-
     @Override
     public Post mapRow(ResultSet resultSet, int i) throws SQLException {
         Post post=new Post();

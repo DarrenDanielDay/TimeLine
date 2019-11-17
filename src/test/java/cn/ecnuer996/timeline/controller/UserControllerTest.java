@@ -2,14 +2,10 @@ package cn.ecnuer996.timeline.controller;
 
 
 import cn.ecnuer996.timeline.bean.Post;
-import cn.ecnuer996.timeline.bean.PostImage;
 import cn.ecnuer996.timeline.bean.User;
 import cn.ecnuer996.timeline.dao.PostDao;
 import cn.ecnuer996.timeline.dao.PostImageDao;
 import cn.ecnuer996.timeline.dao.UserDao;
-import cn.ecnuer996.timeline.service.PostService;
-import com.alibaba.fastjson.JSONObject;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
 import org.junit.jupiter.api.Test;
@@ -29,7 +25,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -52,7 +47,7 @@ class UserControllerTest {
     @BeforeEach
     public void init() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        List<Post> posts = new ArrayList<Post>();
+        List<Post> posts = new ArrayList<>();
         List<String> images = new ArrayList<>();
         images.add("1");
         images.add("2");
@@ -73,7 +68,7 @@ class UserControllerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"2019-11-15 16:29:31"})
+    @ValueSource(strings = {"2019-11-15 16:29:31", "2019-11-14 23:59:59"})
     @NullSource
     @EmptySource
     void getMorePostsWhenNotError(String time) throws Exception {
@@ -105,7 +100,7 @@ class UserControllerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"2019-11-15 12:33:44", "2019-11-9 12:33:44"})
+    @ValueSource(strings = {"2019-11-15 12:33:44", "2019-11-09 12:33:44"})
     public void testRefreshNormally(String time) throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/refresh")
@@ -140,7 +135,7 @@ class UserControllerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"abc", "123", "2019-11 12:33:44"})
+    @ValueSource(strings = {"abc", "123", "2019-11 12:33:44", "2019-11-34 12:44"})
     public void testRefreshInvalidDate(String time) throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/refresh")

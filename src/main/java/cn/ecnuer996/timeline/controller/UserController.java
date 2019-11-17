@@ -64,7 +64,6 @@ public class UserController {
         JSONObject response = new JSONObject();
         JSONArray items = new JSONArray();
         List<Post> posts;
-
         if(time != null && !"".equals(time)) {
             Date date;
             try {

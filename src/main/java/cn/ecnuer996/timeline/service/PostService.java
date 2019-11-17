@@ -23,7 +23,7 @@ public class PostService {
     @Autowired
     private PostImageDao postImageDao;
 
-    private String loveUrl = "https://ecnuer996.cn/timeline-file/post-image/love.jpg";
+    final private String loveUrl = "https://ecnuer996.cn/timeline-file/post-image/love.jpg";
 
     //随机生成一些post并插入到数据库
     public List<Post> generateNewPostsRandomly(Date latestPostTime){
