@@ -86,27 +86,7 @@ public class UserController {
         return response;
     }
 
-//    @RequestMapping(value = "/test-generate", method = RequestMethod.GET)
-//    public JSONObject testGeneratePosts(@RequestParam String time) {
-//        JSONObject response=new JSONObject();
-//        JSONArray items=new JSONArray();
-//        Date date;
-//        try {
-//            date = dateFormat.parse(time);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//        List<Post> posts=postService.generateNewPostsRandomly(date);
-//        for (int i = 0; i < posts.size(); ++i) {
-//            Post post = posts.get(i);
-//            items.add(generatePostItem(post));
-//        }
-//        response.put("posts",items);
-//        return response;
-//    }
-
-    public JSONObject generatePostItem(Post post){
+    private JSONObject generatePostItem(Post post){
         JSONObject item = new JSONObject();
         User user = userDao.selectUserById(post.getUserId());
         List<String> images = postImageDao.selectImagesByPostId(post.getId());
@@ -118,31 +98,4 @@ public class UserController {
         item.put("images", images);
         return item;
     }
-
-//    @RequestMapping(value = "more-posts",method = RequestMethod.GET)
-//    public JSONObject getMorePosts(@RequestParam(required = false) Integer id){
-//        JSONObject response=new JSONObject();
-//        JSONArray items=new JSONArray();
-//        List<Post> posts;
-//        if(id!=null){
-//            posts=postDao.listNextFivePost(id);
-//        }else{
-//            posts=postDao.listLatestFivePost();
-//        }
-//        for(int i=0;i<posts.size();++i){
-//            JSONObject item=new JSONObject();
-//            Post post=posts.get(i);
-//            User user=userDao.selectUserById(post.getUserId());
-//            List<String> images=postImageDao.selectImagesByPostId(post.getId());
-//            item.put("nickname",user.getNickname());
-//            item.put("avatar",user.getAvatar());
-//            item.put("id",post.getId());
-//            item.put("content",post.getContent());
-//            item.put("postTime",dateFormat.format(post.getTime()));
-//            item.put("images",images);
-//            items.add(item);
-//        }
-//        response.put("posts",items);
-//        return response;
-//    }
 }
